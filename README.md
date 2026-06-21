@@ -55,7 +55,7 @@ This repo is ideal for hackathons, portfolio demos, and as a foundation for prod
 ## Quick Installation
 
 1. Clone the repo:
-   git clone https://github.com/<your-username>/ai-recruiter-ai-champs.git
+   git clone https://github.com/<your-username>ai-recruiter-ai-champs.git
    cd ai-recruiter-ai-champs
 
 2. Create and activate a virtual environment:
