@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+env/
+venv/
+ENV/
+.venv/
+
+# Editor
+.vscode/
+.idea/
+
+# Data
+data/*.db
+data/*.sqlite
+*.csv
+
+# Logs
+*.log
+
+# Test / caches
+.cache/
+htmlcov/
+.coverage
