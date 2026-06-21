@@ -104,3 +104,55 @@ POST JSON example:
   "skills": ["Python", "Django"],
   "limit": 5
 }
+## Groq Integration - Complete ✅
+
+The ranking system now supports **semantic skill matching** via Groq's Responses API.
+
+### How it works
+- Backend calls `src/groq_client.semantic_skill_score()` when `use_groq=true`.
+- The function sends candidate text + job skills to Groq, which returns a numeric similarity score (0..1).
+- Score is blended with keyword matching: `final_score = 0.6 * keyword_ratio + 0.4 * semantic_score`.
+- Falls back to TF-IDF if Groq is unavailable or requests fail.
+
+### Setup (already done)
+- Repository secrets configured: `GROQ_API_KEY`, `GROQ_API_URL`
+- Files added:
+  - `src/groq_client.py` — Groq client with fallback logic
+  - `src/ranking.py` — Updated to use semantic scoring
+  - `.github/workflows/groq-test.yml` — CI test workflow
+  - `scripts/groq_test.py` — Integration test script
+
+### Local testing (on laptop)
+```bash
+# Create .env (do not commit)
+echo "GROQ_API_KEY=sk_groq_YOUR_KEY" > .env
+echo "GROQ_API_URL=https://api.groq.com/openai/v1/responses" >> .env
+
+# Install & run
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python -c "import nltk; nltk.download('punkt')"
+uvicorn backend.api:app --reload --port 8000
+
+# Test endpoints
+curl "http://127.0.0.1:8000/rank?skills=Python,TensorFlow"                    # TF-IDF
+curl "http://127.0.0.1:8000/rank?skills=Python,TensorFlow&use_groq=true"     # Groq + blend
+```
+
+### Automatic testing
+- GitHub Actions workflow runs on every push to main and on manual trigger.
+- Logs available at: Repo → Actions → Groq API Integration Test
+- Workflow validates that Groq endpoint is reachable and returns numeric similarity.
+
+### Fallback behavior
+If Groq is unavailable (network error, auth failure, rate limit):
+1. `semantic_skill_score()` tries TF-IDF as fallback.
+2. If TF-IDF also unavailable, returns 0.0 (safe default).
+3. Ranking continues with keyword matching only — no crash.
+
+### Next steps (optional)
+- Tune blending weights in `src/ranking.py` (currently 0.6 keyword + 0.4 semantic).
+- Add caching for repeated candidate/skill comparisons.
+- Monitor Groq usage in dashboard; set rate limits if needed.
+- Add more comprehensive test cases in `scripts/groq_test.py`.
