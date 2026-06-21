@@ -70,6 +70,19 @@ This repo is ideal for hackathons, portfolio demos, and as a foundation for prod
    python -c "import nltk; nltk.download('punkt')"
 
 ---
+### Groq API quick test
+
+If you set GROQ_API_KEY and GROQ_API_URL (see repo Secrets), test the Groq Responses endpoint with this curl (replace <YOUR_KEY> and <MODEL_NAME>):
+
+```bash
+curl -s -X POST "https://api.groq.com/openai/v1/responses" \
+  -H "Authorization: Bearer <YOUR_KEY>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "<MODEL_NAME>",
+    "input": "Compare the candidate to the required skills and return EXACTLY a JSON object with one key named \"similarity\" whose value is a decimal between 0 and 1, and nothing else.\n\nCandidate: Experienced ML engineer with Python, TensorFlow, PyTorch, NLP.\nRequired skills: Python, TensorFlow, PyTorch, machine learning, nlp\n\nReturn ONLY: {\"similarity\": 0.0}",
+    "parameters": { "max_output_tokens": 20 }
+  }'
 
 ## Usage
 
