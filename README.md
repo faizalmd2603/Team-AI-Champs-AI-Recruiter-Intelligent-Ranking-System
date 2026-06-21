@@ -151,6 +151,8 @@ If Groq is unavailable (network error, auth failure, rate limit):
 2. If TF-IDF also unavailable, returns 0.0 (safe default).
 3. Ranking continues with keyword matching only — no crash.
 
+[![Groq Integration Test](https://github.com/faizalmd2603/Team-AI-Champs-AI-Recruiter-Intelligent-Ranking-System/actions/workflows/groq-test.yml/badge.svg)](https://github.com/faizalmd2603/Team-AI-Champs-AI-Recruiter-Intelligent-Ranking-System/actions/workflows/groq-test.yml)
+
 ### Next steps (optional)
 - Tune blending weights in `src/ranking.py` (currently 0.6 keyword + 0.4 semantic).
 - Add caching for repeated candidate/skill comparisons.
