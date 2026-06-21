@@ -2,7 +2,7 @@
 ranking.py
 Contains the logic to rank candidates given parsed candidate records and job requirements.
 
-This updated version optionally uses semantic matching (Groq) via src/groq_client.py.
+This version optionally uses semantic matching (Groq) via src/groq_client.py.
 If semantic matching is enabled (use_semantic=True), a blended skill match ratio is used.
 """
 
@@ -66,13 +66,11 @@ def rank_candidates(
 
         final_skill_ratio = keyword_ratio
         if use_semantic and semantic_skill_score is not None:
-            # Build candidate text to send to semantic client
             candidate_text = " ".join(
                 [p.get("name", ""), p.get("education", "")] + p.get("skills", [])
             )
             try:
                 sem_score = semantic_skill_score(candidate_text, required)  # 0..1
-                # Blend ratios (weights adjustable)
                 final_skill_ratio = 0.6 * keyword_ratio + 0.4 * sem_score
             except Exception:
                 final_skill_ratio = keyword_ratio
